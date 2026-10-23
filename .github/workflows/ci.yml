@@ -22,7 +22,7 @@ jobs:
       - name: Verify Strict No-Emoji Policy
         run: |
           echo "Verifying no emojis exist in codebase, comments, or documentation..."
-          if git grep -P "[\x{1F300}-\x{1F9FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}]"; then
+          if git grep -I -P "[\x{1F300}-\x{1F9FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}]" -- ':!*.jar' ':!*.xlsx' ':!*.zip' ':!gradle/wrapper/*'; then
             echo "ERROR: Found emojis in the repository. Emojis are strictly forbidden by project rules."
             exit 1
           fi

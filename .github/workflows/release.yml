@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    name: Build & Publish GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Strict No-Emoji Policy
+        run: |
+          echo "Verifying no emojis exist in codebase, comments, or documentation..."
+          if git grep -I -P "[\x{1F300}-\x{1F9FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}]" -- ':!*.jar' ':!*.xlsx' ':!*.zip' ':!gradle/wrapper/*'; then
+            echo "ERROR: Found emojis in the repository. Emojis are strictly forbidden by project rules."
+            exit 1
+          fi
+          echo "No-emoji check passed successfully."
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle (Dependency & Wrapper Caching)
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x gradlew || true
+
+      - name: Run Test Suite
+        run: ./gradlew check
+
+      - name: Build Release Artifacts (JAR and Sources)
+        run: ./gradlew assemble
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
+          generate_release_notes: true
+          draft: false
+          prerelease: false

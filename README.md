@@ -19,6 +19,44 @@ SheetStream is an ultra-lightweight library designed specifically for mobile app
 
 ---
 
+## Installation
+
+### Option 1: JitPack (Recommended for Gradle projects)
+
+Add JitPack repository to your root `settings.gradle.kts` (or root `build.gradle`):
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = java.net.URI("https://jitpack.io") }
+    }
+}
+```
+
+Add SheetStream dependency to your app module `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation("com.github.KingAs6583:SheetStream:1.0.0")
+}
+```
+
+### Option 2: Direct GitHub Releases (JAR)
+
+1. Download `sheetstream-1.0.0.jar` from the GitHub Releases page.
+2. Place the JAR into your Android project's `app/libs/` directory.
+3. In `app/build.gradle.kts`, add:
+
+```kotlin
+dependencies {
+    implementation(files("libs/sheetstream-1.0.0.jar"))
+}
+```
+
+---
+
 ## Quick Usage
 
 ```kotlin
@@ -183,6 +221,44 @@ You can run the demonstration directly from the command line or within your IDE:
 2. Navigate to `src/main/kotlin/com/fidluc/sheetstream/Main.kt`.
 3. Click the green **Play** icon next to `fun main()`.
 4. It will immediately generate `sample_financial_report.xlsx` and stream-read it back to the console.
-5. Open the generated file in Microsoft Excel, LibreOffice, or Google Sheets to inspect the output!
+5. Open the generated file in Microsoft Excel, LibreOffice, or Google Sheets to inspect the output.
+
+---
+
+## Package Structure & Architecture Rationale
+
+SheetStream intentionally uses a flat package structure:
+
+```text
+com.fidluc.sheetstream
+├── SheetStream.kt     (High-level builder & ZIP coordinator)
+├── Worksheet.kt       (Row-by-row XML streaming)
+├── CellStyle.kt       (Predefined & custom RGB styling)
+├── SheetReader.kt     (SAX streaming parser)
+├── RowRecord.kt       (Flyweight typed row accessors)
+├── Exceptions.kt      (Safety limit exceptions & ReaderConfig)
+└── XmlTemplates.kt    (Internal OOXML structure generators)
+```
+
+### Why a Flat Structure is Best for Developers:
+
+1. **Single Import Ergonomics**: Consumers only need `import com.fidluc.sheetstream.*` to gain full
+   access to writers, readers, builders, styles, and exceptions without fragmenting across
+   subpackages.
+2. **Clean Encapsulation**: Low-level implementation details (`XmlTemplates`, `SheetMetadata`) are
+   marked Kotlin `internal`, preventing public API pollution.
+3. **Android DEX & Inlining Optimization**: Avoids synthetic cross-package accessor methods in
+   bytecode, keeping binary size under 30 KB.
+
+---
+
+## Documentation & Project Links
+
+- [Changelog](CHANGELOG.md) - Complete version history and release notes.
+- [Maintainer Release Guide](RELEASING.md) - Instructions for cutting tags, automated GitHub
+  Releases, and Maven Central deployment.
+- [Contributing Guidelines](CONTRIBUTING.md) - Code style, architectural invariants, and pull
+  request checklist.
+- [License](LICENSE) - Apache License 2.0.
 
 
