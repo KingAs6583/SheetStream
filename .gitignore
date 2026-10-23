@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Local configuration
+local.properties
+
+# Generated Spreadsheets & Test Output
+*.xlsx
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log

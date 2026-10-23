@@ -1,0 +1,37 @@
+# Set default line endings to LF for all text files (Windows & Linux compatibility)
+* text=auto eol=lf
+
+# Kotlin, Java, and build scripts
+*.kt text eol=lf
+*.kts text eol=lf
+*.java text eol=lf
+*.gradle text eol=lf
+
+# Documentation and text files
+*.md text eol=lf
+*.txt text eol=lf
+LICENSE text eol=lf
+
+# Configurations and markup
+*.xml text eol=lf
+*.json text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+gradlew text eol=lf
+
+# Windows batch scripts (require CRLF for Windows cmd interpreter)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.jar binary
+*.zip binary
+*.xlsx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.so binary
